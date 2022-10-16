@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class App 
 {
@@ -30,8 +33,11 @@ public class App
             // con.close();
             try (Scanner scanner = new Scanner(response)) {
                 String responseBody = scanner.useDelimiter("\\A").next();
-                System.out.println(responseBody);
-                System.out.println();
+                // establish an ObjectMapper
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(responseBody);
+
+
             } 
         } catch(MalformedURLException ex) {
             System.out.println("MalformedURLException: " + ex);
@@ -43,4 +49,20 @@ public class App
         System.out.println("Execution time: " + (endTime - startTime) + " ms");
        
     }
+};
+
+class Pokemon 
+{
+    private String name;
+    private String height;
+    private Integer baseExperience;
+    private URL frontSprite;
+    private URL backSprite;
+
+    public Pokemon(InputStream json)
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(json);
+    }
 }
+
