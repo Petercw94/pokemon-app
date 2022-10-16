@@ -12,7 +12,16 @@ public class App
 {
     public static void main( String[] args )
     {
+        // benchmark the execution time:
+        long startTime = System.currentTimeMillis();
         // create an instance of the URL class
+
+         // create an instance of the HTTP connection class
+        // 1. The connection object is created by invoking the openConnection method on a URL.
+        // 2. The setup parameters and general request properties are manipulated.
+        // 3. The actual connection to the remote object is made, using the connect method.
+        // 4. The remote object becomes available. The header fields and the contents of the remote object can be accessed.
+        // URLConnection con = url.openConnection();
         try {
             URLConnection con = new URL("https://pokeapi.co/api/v2/pokemon/charizard").openConnection();
             String charset = java.nio.charset.StandardCharsets.UTF_8.name();
@@ -22,6 +31,7 @@ public class App
             try (Scanner scanner = new Scanner(response)) {
                 String responseBody = scanner.useDelimiter("\\A").next();
                 System.out.println(responseBody);
+                System.out.println();
             } 
         } catch(MalformedURLException ex) {
             System.out.println("MalformedURLException: " + ex);
@@ -29,12 +39,8 @@ public class App
             System.out.println("IOException: " + ex);
         }
         
-        
-        // create an instance of the HTTP connection class
-        // 1. The connection object is created by invoking the openConnection method on a URL.
-        // 2. The setup parameters and general request properties are manipulated.
-        // 3. The actual connection to the remote object is made, using the connect method.
-        // 4. The remote object becomes available. The header fields and the contents of the remote object can be accessed.
-        // URLConnection con = url.openConnection();
+        long endTime = System.currentTimeMillis();
+        System.out.println("Execution time: " + (endTime - startTime) + " ms");
+       
     }
 }
