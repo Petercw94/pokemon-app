@@ -5,10 +5,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.*;
+
 
 
 public class App 
@@ -31,16 +35,22 @@ public class App
             con.setRequestProperty("Accept-Charset", charset);
             InputStream response = con.getInputStream();
             // con.close();
-            
-            ObjectMapper mapper = new ObjectMapper();
-            Pokemon poke = mapper.readValue(response, Pokemon.class)
+            JSONParser parser = new JSONParser();
+            JSONObject resposneJSON = (JSONObject) parser.parse(new InputStreamReader(response, "UTF-8"));
 
+            // System.out.println(resposneJSON);
+            Pokemon poke = new Pokemon(resposneJSON);
+            System.out.println("Name: " + poke.getName());
+            System.out.println("Height: " + poke.getHeight() + " | Weight: " + poke.getWeight());
+            System.out.println("Base Experience: " + poke.getBaseExperience());
 
              
         } catch(MalformedURLException ex) {
             System.out.println("MalformedURLException: " + ex);
         } catch(IOException ex) {
             System.out.println("IOException: " + ex);
+        } catch(ParseException ex) {
+            System.out.println("ParseException: " + ex);
         }
         
         long endTime = System.currentTimeMillis();
@@ -52,17 +62,18 @@ public class App
 class Pokemon 
 {
     private String name;
-    private Integer height;
-    private Integer weight;
-    private Integer baseExperience;
+    private long height;
+    private long weight;
+    private long baseExperience;
     // private URL frontSprite;
     // private URL backSprite;
 
-    public Pokemon(String name, Integer height, Integer baseExperience)
+    public Pokemon(JSONObject json)
     {
-        this.name = name;
-        this.height = height;
-        this.baseExperience = baseExperience;
+        this.name = (String) json.get("name");
+        this.height = (long) json.get("height");
+        this.weight = (long) json.get("weight");
+        this.baseExperience = (long) json.get("base_experience");
     }
 
     public String getName()
@@ -70,12 +81,17 @@ class Pokemon
         return name;
     }
 
-    public int[] getHeightAndWeight()
+    public long getHeight()
     {
-        return new int[] {height, weight};
+        return height;
     }
 
-    public Integer getBaseExperience()
+    public long getWeight()
+    {
+        return weight;
+    }
+
+    public long getBaseExperience()
     {
         return baseExperience;
     }
