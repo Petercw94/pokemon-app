@@ -31,14 +31,12 @@ public class App
             con.setRequestProperty("Accept-Charset", charset);
             InputStream response = con.getInputStream();
             // con.close();
-            try (Scanner scanner = new Scanner(response)) {
-                String responseBody = scanner.useDelimiter("\\A").next();
-                // establish an ObjectMapper
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(responseBody);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            Pokemon poke = mapper.readValue(response, Pokemon.class)
 
 
-            } 
+             
         } catch(MalformedURLException ex) {
             System.out.println("MalformedURLException: " + ex);
         } catch(IOException ex) {
@@ -54,15 +52,32 @@ public class App
 class Pokemon 
 {
     private String name;
-    private String height;
+    private Integer height;
+    private Integer weight;
     private Integer baseExperience;
-    private URL frontSprite;
-    private URL backSprite;
+    // private URL frontSprite;
+    // private URL backSprite;
 
-    public Pokemon(InputStream json)
+    public Pokemon(String name, Integer height, Integer baseExperience)
     {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(json);
+        this.name = name;
+        this.height = height;
+        this.baseExperience = baseExperience;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public int[] getHeightAndWeight()
+    {
+        return new int[] {height, weight};
+    }
+
+    public Integer getBaseExperience()
+    {
+        return baseExperience;
     }
 }
 
