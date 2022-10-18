@@ -43,6 +43,7 @@ public class App
             System.out.println("Name: " + poke.getName());
             System.out.println("Height: " + poke.getHeight() + " | Weight: " + poke.getWeight());
             System.out.println("Base Experience: " + poke.getBaseExperience());
+            System.out.println("Front Sprite: " + poke.getFrontSprite());
 
              
         } catch(MalformedURLException ex) {
@@ -65,8 +66,8 @@ class Pokemon
     private long height;
     private long weight;
     private long baseExperience;
-    // private URL frontSprite;
-    // private URL backSprite;
+    private String frontSprite;
+    private String backSprite;
 
     public Pokemon(JSONObject json)
     {
@@ -74,6 +75,10 @@ class Pokemon
         this.height = (long) json.get("height");
         this.weight = (long) json.get("weight");
         this.baseExperience = (long) json.get("base_experience");
+        // accessing the sprite layer
+        JSONObject sprites = (JSONObject) json.get("sprites");
+        this.frontSprite = (String) sprites.get("front_default");
+        this.backSprite = (String) sprites.get("back_default");
     }
 
     public String getName()
@@ -94,6 +99,11 @@ class Pokemon
     public long getBaseExperience()
     {
         return baseExperience;
+    }
+
+    public String getFrontSprite()
+    {
+        return frontSprite;
     }
 }
 
