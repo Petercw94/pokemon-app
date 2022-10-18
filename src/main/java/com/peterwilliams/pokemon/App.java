@@ -30,7 +30,23 @@ public class App
         // 4. The remote object becomes available. The header fields and the contents of the remote object can be accessed.
         // URLConnection con = url.openConnection();
         try {
-            URLConnection con = new URL("https://pokeapi.co/api/v2/pokemon/charizard").openConnection();
+
+            // getting the user input for the desired pokemon
+            Scanner input = new Scanner(System.in);
+            
+            System.out.println("Please select a pokemon for battle: ");
+            System.out.println("1. Charizard");
+            System.out.println("2. Pikachu");
+            System.out.println("3. Squirtle");
+            System.out.println("4. Ditto");
+            
+            int choice = input.nextInt();
+            input.close(); // close the scanner object
+
+            PokeOptions pokeChoice = PokeOptions.values()[choice-1];
+            System.out.println("\nLooks like you chose: " + pokeChoice.pokemonName() + ".");
+
+            URLConnection con = new URL(String.format("https://pokeapi.co/api/v2/pokemon/%s", pokeChoice.pokemonName())).openConnection();
             String charset = java.nio.charset.StandardCharsets.UTF_8.name();
             con.setRequestProperty("Accept-Charset", charset);
             InputStream response = con.getInputStream();
@@ -41,9 +57,6 @@ public class App
             // System.out.println(resposneJSON);
             Pokemon poke = new Pokemon(resposneJSON);
             System.out.println("Name: " + poke.getName());
-            System.out.println("Height: " + poke.getHeight() + " | Weight: " + poke.getWeight());
-            System.out.println("Base Experience: " + poke.getBaseExperience());
-            System.out.println("Front Sprite: " + poke.getFrontSprite());
 
              
         } catch(MalformedURLException ex) {
